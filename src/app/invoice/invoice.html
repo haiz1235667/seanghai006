@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Receipt</title>
+
+</head>
+<body>
+
+<div class="receipt">
+    <div>
+        <p>GST Number : {{ gstNumber }}</p>
+        <p>Date : {{ date | date: 'shortDate' }} <span style="float:right;">Time : {{ date | date: 'shortTime' }}</span></p>
+        <p>Table #: {{ tableNumber }} <span style="float:right;">Bill #: {{ billNumber }}</span></p>
+    </div>
+    
+    <h2 class="center">Original Receipt</h2>
+    <hr>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ITEM</th>
+                <th class="right">QTY</th>
+                <th class="right">RATE</th>
+                <th class="right">AMOUNT</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of cartService.getItems(); track item.id) {
+            <tr>
+                <td>{{ item.name }}</td>
+                <td class="right">{{ item.qty }}</td>
+                <td class="right">{{ item.price | currency }}</td>
+                <td class="right">{{ item.qty * item.price | currency }}</td>
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="total">
+                <th class="right" colspan="3">Total</th>
+                <th class="right">{{ cartService.getTotal() | currency }}</th>
+            </tr>
+            @if (receivedAmount > 0) {
+            <tr class="total">
+                <th class="right" colspan="3">Received (USD)</th>
+                <th class="right">{{ receivedAmount | currency }}</th>
+            </tr>
+            <tr class="total">
+                <th class="right" colspan="3">Change (USD)</th>
+                <th class="right">{{ changeAmount | currency }}</th>
+            </tr>
+            <tr class="total">
+                <th class="right" colspan="3">Change (KHR)</th>
+                <th class="right">{{ changeAmount | toKHR }}</th>
+            </tr>
+            }
+        </tfoot>
+    </table>
+
+    <p>Paid by : CASH</p>
+    
+    <div class="footer">
+        <p>Thank you for your visit!</p>
+        <p>Technology Partner</p>
+        <p>{{ website }}</p>
+    </div>
+
+    <button onclick="window.print()">Print</button>
+</div>
+
+</body>
+</html>

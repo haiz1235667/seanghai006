@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POS System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container-fluid pos-container">
+    <div class="row h-100">
+
+        <!-- LEFT SIDE -->
+        <div class="col-md-8 d-flex flex-column">
+              <!-- Category -->
+            <div class="category-bar">
+                <div class="category-scroll d-flex">
+                    <button class="category-btn active">All</button>
+                    <button class="category-btn">Drinks</button>
+                    <button class="category-btn">Food</button>
+                    <button class="category-btn">Snacks</button>
+                    <button class="category-btn">Coffee</button>
+                    <button class="category-btn">Dessert</button>
+                    <button class="category-btn">Promotion</button>
+                </div>
+            </div>
+
+            <!-- Product Card -->
+            <div class="product-wrapper">
+                @if (productService.loading()) {
+                    <div class="p-3 text-muted">Loading products...</div>
+                } @else if (productService.loadError()) {
+                    <div class="p-3 text-danger">{{ productService.loadError() }}</div>
+                } @else {
+                    <div class="row">
+                        @for (item of productService.getProducts(); track item.id) {
+                            <div
+                                class="col-lg-3 col-md-3 col-sm-6 mt-3"
+                                (click)="onProductClick(item)"
+                            >
+                                <div class="card product-card shadow-sm">
+                                    <img
+                                        [src]="item.image"
+                                        alt="{{ item.name }}"
+                                        class="card-img-top product-img"
+                                        style="height: 250px; object-fit: contain;"
+                                    />
+                                    <div class="card-body text-center">
+                                        <h6 class="pro-title">{{ item.name }}</h6>
+                                        <p class="text-primary font-weight-bold">
+                                            {{ item.price | currency }}
+                                        </p>
+                                        <button class="btn btn-sm btn-primary btn-block">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        } @empty {
+                            <div class="col-12 p-3 text-muted">No products found.</div>
+                        }
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="col-md-4 cart-section">
+
+            <!-- Header -->
+            <div class="cart-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">🛒 Cart</h5>
+                <small>Order #001</small>
+            </div>
+
+            <!-- Cart Items -->
+            <div class="cart-items p-3">
+                @for (item of cartService.getItems(); track item.id) {
+                     <div class="cart-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ item.name }}</strong>
+                        <div class="text-muted small">{{ item.price | currency }} x {{ item.qty }}</div>
+                    </div>
+                    <div class="text-right">
+                        <strong>{{ item.qty * item.price | currency  }}</strong>
+                    </div>
+                </div>
+                }
+               
+
+               
+            </div>
+
+            <!-- Summary -->
+            <div class="cart-summary p-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <span class="subamount"> {{ cartService.getTotal() | currency }}</span>
+                </div>
+                
+                <hr>
+                <div class="d-flex justify-content-between total-amount">
+                    <strong>Total(USD)</strong>
+                    <strong class="amountUSD"> {{ cartService.getTotal() | currency }}</strong>
+                </div>
+                 <div class="d-flex justify-content-between total-amount">
+                    <strong>Total(KHR)</strong>
+                    <strong class="amountKHR"> {{ cartService.getTotal() | toKHR }}</strong>
+                </div>
+                <div class="d-flex justify-content-between total-amount">
+                    <strong>Received Amount</strong>
+                    <input 
+                    type="number" 
+                    class="form-control-receivedamount" 
+                    placeholder="Received Amount"
+                    step="0.01"
+                    style="width: 50%; font-size: 16px;"
+                    [(ngModel)]="received_amount"
+                    >
+                    
+                </div>
+
+                @if (received_amount - cartService.getTotal()>0) {
+                <div 
+                    class="d-flex justify-content-between total-amount"
+                    style=" color: rgb(248, 70, 70)">
+                      <strong>Change Amount (USD)</strong>
+                    <strong class="amountUSD">{{ (received_amount - cartService.getTotal()) | currency }}</strong>
+                </div>
+                <div 
+                    class="d-flex justify-content-between total-amount" 
+                    style=" color: rgb(248, 70, 70)">
+                    <strong>Change Amount (KHR)</strong>
+                    <strong class="amountKHR">{{ (received_amount - cartService.getTotal()).toString()| toKHR }}</strong>
+                </div>
+                }
+
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn btn-danger btn-block checkout-btn mt-3"
+                        
+                        (click)="cancel()"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-success btn-block checkout-btn mt-3"
+                        (click)="checkout()"
+                        >
+                            Checkout
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>
