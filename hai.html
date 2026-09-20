@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sorry Baby</title>
+    <style>
+      :root {
+        --bg1: #1a0d22;
+        --bg2: #3b1638;
+        --bg3: #ff5eba;
+        --card: rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.18);
+        --text: #fff8fc;
+        --pink: #ffd3ef;
+        --pink-strong: #ff8dc7;
+        --rose: #ff5fa2;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(circle at top, #5d2e67 0%, var(--bg1) 28%, var(--bg2) 70%, #140b1b 100%);
+        color: var(--text);
+        overflow: hidden;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+      }
+
+      .scene {
+        position: relative;
+        width: min(88vw, 700px);
+        min-height: 480px;
+        display: grid;
+        place-items: center;
+      }
+
+      .glow {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 125, 190, 0.6), rgba(255, 125, 190, 0.08) 55%, transparent 80%);
+        filter: blur(25px);
+        z-index: 0;
+      }
+
+      .card {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        padding: 3rem 2rem 2.5rem;
+        border-radius: 30px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        box-shadow: 0 26px 80px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(12px);
+      }
+
+      .heart {
+        font-size: clamp(2.8rem, 6vw, 5rem);
+        margin-bottom: 1rem;
+        animation: heartbeat 1.5s ease-in-out infinite;
+        text-shadow: 0 0 25px rgba(255, 130, 200, 0.8);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.3rem, 6vw, 4.4rem);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--pink);
+        text-shadow: 0 0 24px rgba(255, 149, 209, 0.7);
+      }
+
+      p {
+        margin: 1.2rem auto 0;
+        max-width: 560px;
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .animate {
+        animation: reveal 0.8s ease;
+      }
+
+      .pulse {
+        animation: glowPulse 2s ease-in-out infinite;
+      }
+
+      #hearts {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .floating-heart {
+        position: absolute;
+        bottom: -40px;
+        left: 50%;
+        animation: rise linear forwards;
+        filter: drop-shadow(0 0 12px rgba(255, 125, 196, 0.8));
+        user-select: none;
+      }
+
+      @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        20% { transform: scale(1.18); }
+        40% { transform: scale(0.96); }
+        60% { transform: scale(1.12); }
+        80% { transform: scale(1); }
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes glowPulse {
+        0%, 100% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.08); opacity: 1; }
+      }
+
+      @keyframes rise {
+        0% {
+          transform: translateY(0) scale(0.7);
+          opacity: 0;
+        }
+        15% { opacity: 1; }
+        100% {
+          transform: translateY(-500px) scale(1.3);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scene">
+      <div class="glow" id="glow"></div>
+      <div id="hearts"></div>
+
+      <div class="card">
+        <div class="heart">❤</div>
+        <h1 id="title" class="animate">Sorry Baby</h1>
+        <p id="subtitle" class="animate">You are my peace, my joy, and my favorite place to be.</p>
+      </div>
+    </div>
+
+    <script src="hai.js"></script>
+  </body>
+</html>
